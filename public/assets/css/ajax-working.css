@@ -1,0 +1,30 @@
+.modal-backdrop-white, .modal-backdrop-white.fade.in {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1040;
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+	background: #fff;
+}
+.modal-scrollable {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: auto;
+}
+.loading-spinner {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -12px 0 0 -12px;
+}
+.loading-spinner-text {
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+}
