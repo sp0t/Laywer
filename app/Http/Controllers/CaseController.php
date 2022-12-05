@@ -91,9 +91,9 @@ class CaseController extends Controller
             'active_page'       => 'cases'
         ];
 
-        $types = CaseType::pluck('name', 'id');
-        $lawyers = User::where(['status'=> 1, 'user_type' => 1])->pluck('name', 'id');
-        $clients = Customer::where(['verified'=> 1, 'is_client' => 1, 'inactive' => 0])->pluck('name', 'id');
+        $types = CaseType::get();
+        $lawyers = User::where(['status'=> 1, 'user_type' => 1])->get();
+        $clients = Customer::where(['verified'=> 1, 'is_client' => 1, 'inactive' => 0])->get();
 
         return view('cases.add-new-case-tab', compact('page_meta', 'types', 'lawyers', 'clients'));
     }

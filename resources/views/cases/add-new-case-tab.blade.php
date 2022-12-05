@@ -85,6 +85,8 @@
             <div class="tab-content">
                 <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                     <form id="form-1" class="row row-cols-1 ms-5 me-5 needs-validation" novalidate  method="post" action="javascript:void(0)" enctype="multipart/form-data">
+                            @csrf
+                        {{ csrf_field() }}
                         <fieldset class="mb-3">
                             <legend class="text-uppercase font-size-sm font-weight-bold border-bottom"></legend>
                             <div class="form-group row">
@@ -92,19 +94,10 @@
                                 <div class="col-lg-9">
                                     <div class="mb-4" data-select2-id="189">
                                         <select data-placeholder="Enter 'as'" class="form-control select2" id="case_type">
-                                            <option data-select2-id="83"></option>
-                                            <optgroup label="Mountain Time Zone" data-select2-id="198">
-                                                <option value="AZ" data-select2-id="199">Arizona</option>
-                                                <option value="CO" data-select2-id="200">Colorado</option>
-                                                <option value="ID" data-select2-id="201">Idaho</option>
-                                                <option value="WY" data-select2-id="202">Wyoming</option>
-                                            </optgroup>
-                                            <optgroup label="Central Time Zone" data-select2-id="203">
-                                                <option value="AL" data-select2-id="204">Alabama</option>
-                                                <option value="IA" data-select2-id="205">Iowa</option>
-                                                <option value="KS" data-select2-id="206">Kansas</option>
-                                                <option value="KY" data-select2-id="207">Kentucky</option>
-                                            </optgroup>
+                                            <option data-select2-id="83"> Select case type</option>
+                                            @foreach($types as $typeInfo)
+                                            <option value="{{ $typeInfo->id }}" data-select2-id="199">{{ $typeInfo->name }}</option>
+                                            @endforeach
                                         </select>
                                         <div class="valid-feedback">
                                             ooks good!
@@ -155,12 +148,11 @@
                                 <div class="col-lg-9">
                                     <div class="form-group">
                                         
-                                        <select class="form-control " multiple="" >
-                                           
-                                            <option value="CO">wasana</option>
-                                            <option value="ID">ranu</option>
-                                            <option value="WY">john</option>
-                                           
+                                        <select class="form-control " multiple="" id="lawyers" required>
+                                            <option value="">Select lawyers</option>
+                                            @foreach($lawyers as $typeInfo)
+                                            <option value="{{ $typeInfo->id }}" data-select2-id="199">{{ $typeInfo->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -170,11 +162,11 @@
                                 <label class="col-form-label col-lg-3">Clients</label>
                                 <div class="col-lg-9">
                                     <div class="form-group">
-                                        
-                                        <select class="form-control select2" multiple="" data-fouc="" data-select2-id="108" tabindex="-1" aria-hidden="true">
-                                            <option value="CO">wasana</option>
-                                            <option value="ID">ranu</option>
-                                            <option value="WY">john</option>
+                                        <select class="form-control select2" multiple=""  id="clients" required>
+                                            <option value="">Select Clients</option>
+                                             @foreach($clients as $typeInfo)
+                                            <option value="{{ $typeInfo->id }}" data-select2-id="199">{{ $typeInfo->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -703,50 +695,27 @@
             var case_type          = $('#case_type').val();
             var case_title         = $('#case_title').val();
             var case_description   = $('#case_description').val();
+            var lawyers   = $('#lawyers').val();
+            var clients   = $('#clients').val();
       
             $.ajax({
                 data: {
-                    case_type : case_type,
-                    case_title : case_title,
-                    case_description : case_description,
+                    type : case_type,
+                    title : case_title,
+                    description : case_description,
+                    lawyers : lawyers,
+                    clients : clients,
                     _token: $("input[name='_token']").val() ,
                 },
-                contentType: false,
-                cache: false,
-                processData: false,
                 type: "POST",
+                dataType:'JSON',
                 url: window.baseUrl + '/cases/add',
                 success:function(data) {
                     
-                    $('#applicant_id').val(data);
-                    $('#applicant_id_document').val(data);
-                    $('.your-button-class').attr('order',data);
-                   
                    
                  }
             }); 
         });
-        // $('#form-1').on('submit', function(event) {
-        //     event.preventDefault();                          // for demo
-
-        //     $.ajax({
-        //         data:new FormData(this),
-        //         dataType:'JSON',
-        //         contentType: false,
-        //         cache: false,
-        //         processData: false,
-        //         type: "POST",
-        //         url: window.baseUrl + '/online-application-profile-submit',
-        //         success:function(data) {
-                    
-        //             $('#applicant_id').val(data);
-        //             $('#applicant_id_document').val(data);
-        //             $('.your-button-class').attr('order',data);
-                   
-                   
-        //          }
-        //     }); 
-        // }); 
 
         const myModal = new bootstrap.Modal(document.getElementById('confirmModal'));
 

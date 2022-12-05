@@ -52,7 +52,11 @@
 	
 	@yield('jsfiles')
 	<script src="{{URL::asset('assets/js/app.js')}}"></script>
-
+	    <!-- Header Script -->
+    <script>
+        window.baseUrl = `{{ url('/') }}`;
+        window.csrf_token = '{{ csrf_token() }}';
+    </script>
 	<!-- /theme JS files -->
 
 </head>
