@@ -111,9 +111,9 @@
 <script type="text/javascript">
     $('#addMewMileStone').on('click',function(e){
         e.preventDefault();
-        var milestone_title    = $('#milestone_title').val();
-        var date               = $('#date').val();
-        var milestone_descraption               = $('#milestone_descraption').val();
+        var milestone_title         = $('#milestone_title').val();
+        var date                    = $('#date').val();
+        var milestone_descraption   = $('#milestone_descraption').val();
 
         $.ajax({
             data: {

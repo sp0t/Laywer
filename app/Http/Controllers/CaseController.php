@@ -10,6 +10,7 @@ use App\Models\CaseType;
 use App\Models\CaseLawyer;
 use App\Models\CaseClient;
 use App\Models\CaseMilestone;
+use App\Models\CasePayment;
 use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
@@ -90,13 +91,25 @@ class CaseController extends Controller
             'page_image'        => '',
             'active_page'       => 'cases'
         ];
+        
+        $pendingPayment   = CasePayment::leftjoin('cases','case_payments.case_id','cases.id')
+            ->where('case_payments.status', 0)
+            ->select('case_payments.*','cases.title')
+            ->get();
+        $completedPayment = CasePayment::where('status', 1)->get();
 
-        $types = CaseType::get();
+        $types         = CaseType::get();
         $caseMilestone = CaseMilestone::where('status', 0)->get();
-        $lawyers = User::where(['status'=> 1, 'user_type' => 1])->get();
-        $clients = Customer::where(['verified'=> 1, 'is_client' => 1, 'inactive' => 0])->get();
+        $caseInfo      = Cases::where('status', 0)
+            ->where('created_by', Auth::user()->id)
+            ->orderBy('id', 'desc')
+            ->first();
 
-        return view('cases.add-new-case-tab', compact('page_meta', 'types', 'lawyers', 'clients', 'caseMilestone'));
+        
+        $lawyers       = User::where(['status'=> 1, 'user_type' => 1])->get();
+        $clients       = Customer::where(['verified'=> 1, 'is_client' => 1, 'inactive' => 0])->get();
+
+        return view('cases.add-new-case-tab', compact('page_meta', 'types', 'lawyers', 'clients', 'caseMilestone', 'pendingPayment', 'completedPayment', 'caseInfo'));
     }
 
     public function store(Request $request){
@@ -147,6 +160,43 @@ class CaseController extends Controller
                 $redirect_url = route('case.edit', [$case->id]).'?tab=milestone';
                 \Session::flash('success', 'Case details added successfully.');
                 return response()->json(['status' => TRUE, 'msg' => 'Case added updated successfully.', 'redirect_url' => $redirect_url]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => FALSE, 'msg' => 'Error occured while saving...', 'e' => $e]);
+            }
+        }
+    }
+
+     public function payment(Request $request){
+      
+        $validator = Validator::make($request->all(), [
+            'payment_by'    => 'required',
+            'amount'        => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => FALSE, 'msg' => implode('<br>', $validator->errors()->all())]);
+        } else {
+            
+            $input = $request->input();
+
+            $case = new CasePayment();
+            $case->payment_by      = $input['payment_by'];
+            $case->amount          = $input['amount'];
+            $case->date            = $input['date'];
+            $case->status          = $input['payment_type'];
+            $case->case_id          = $input['case_id'];
+            $case->invoice_number  = date('Ymdhim');
+            $case->created_by      = Auth::user()->id;
+
+            try {
+                DB::beginTransaction();
+                $case->save();
+
+                DB::commit();
+                
+                return 200;
+
             } catch (\Exception $e) {
                 DB::rollback();
                 return response()->json(['status' => FALSE, 'msg' => 'Error occured while saving...', 'e' => $e]);

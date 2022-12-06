@@ -86,38 +86,16 @@
                 @include('cases.case_details')
                 @include('cases.milestone')
                 @include('cases.payments')
-              
-                
                 <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
                     <form id="form-4" class="row row-cols-1 ms-5 me-5 needs-validation" novalidate>
-                        <div class="col">
-                          <label for="address" class="form-label">Address</label>
-                          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
-                          <div class="invalid-feedback">
-                            Please enter your shipping address.
-                          </div>
-                        </div>
-                        <div class="col">
-                          <label for="validationCustom04" class="form-label">State</label>
-                          <select class="form-select" id="state" required>
-                            <option selected disabled value="">Choose...</option>
-                            <option>State 1</option>
-                            <option>State 2</option>
-                            <option>State 3</option>
-                          </select>
-                          <div class="valid-feedback">
-                            Looks good!
-                          </div>
-                          <div class="invalid-feedback">
-                            Please select a valid state.
-                          </div>
-                        </div>
-                        <div class="col">
-                          <label for="validationCustom05" class="form-label">Zip</label>
-                          <input type="text" class="form-control" id="zip" required>
-                          <div class="invalid-feedback">
-                            Please provide a valid zip.
-                          </div>
+                        <div class="phppot-container">
+                            <div id="drop-area">
+                                <h3 class="drop-text">Drop images here to upload</h3>
+                            </div>
+                            <div id="loader-icon">
+                                <img src="loader.gif" />
+                            </div>
+                            <div id="success-message-info" class="message success display-none"></div>
                         </div>
                     </form>  
                 </div>
@@ -164,22 +142,85 @@
 
     <script type="text/javascript" src="{{ URL::asset( 'dist/js/demo.js') }}"></script>
     <script src="{{ URL::asset( 'assets/js/select2.min.js') }}" type="text/javascript"></script>
-       
-<script type="text/javascript">
+  
+<style>
 
-        
+#drop-area {
+    border-style: dotted;
+    min-height: 200px;
+    padding: 10px;
+    border-color: #999;
+    border-radius: 15px;
+    stroke-width: 1px;
+    margin-bottom: 15px;
+}
+
+h3.drop-text {
+    color: #999;
+    text-align: center;
+    font-size: 2em;
+}
+
+#loader-icon {
+    display: none;
+}
+
+#success-message-info {
+    text-align: center;
+}
+</style>
+<script>
+$(document).ready(function() {
+    $("#drop-area").on('dragenter', function (e){
+    e.preventDefault();
+    });
+
+    $("#drop-area").on('dragover', function (e){
+    e.preventDefault();
+    });
+
+    $("#drop-area").on('drop', function (e){
+    e.preventDefault();
+    var image = e.originalEvent.dataTransfer.files;
+    createFormData(image);
+    });
+});
+
+function createFormData(image) {
+    var formImage = new FormData();
+    formImage.append('userImage', image[0]);
+    uploadFormData(formImage);
+}
+
+function uploadFormData(formData) {
+    $('#loader-icon').show();
+    $.ajax({
+        url: "upload-ajax.php",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(data) {
+            $('#drop-area').append(data);
+            $('#loader-icon').hide()
+            $('#success-message-info').html("Added Successfully");
+            $('#success-message-info').css("display", "inline-block");
+        }
+    });
+}
+</script>      
+    <script type="text/javascript">
         const myModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-
-
         function onCancel() { 
           // Reset wizard
           $('#smartwizard').smartWizard("reset");
 
           // Reset form
-          document.getElementById("form-1").reset();
-          document.getElementById("form-2").reset();
-          document.getElementById("form-3").reset();
-          document.getElementById("form-4").reset();
+          // document.getElementById("form-1").reset();
+          // document.getElementById("form-2").reset();
+          // document.getElementById("form-3").reset();
+          // document.getElementById("form-4").reset();
         }
 
         function onConfirm() {

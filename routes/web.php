@@ -58,6 +58,7 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::resource('cases/type', 'CaseTypeController');
     Route::post('/cases/type', 'CaseTypeController@store')->name('case_type.store');
+    Route::post('/case/payment', 'CaseController@payment')->name('case.payment');
     Route::get('/case/type/{id}/edit', 'CaseTypeController@editInfo')->name('case_type.edit')->where('id', '[0-9]+');
     Route::get('/cases_type/load_ajax', 'CaseTypeController@load_ajax')->name('cases_type.load_ajax'); 
 

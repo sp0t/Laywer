@@ -1,5 +1,6 @@
 <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
     <form id="form-3" class="row row-cols-1 ms-5 me-5 needs-validation" novalidate>
+        @csrf
         <div class="d-flex justify-content-end align-items-center">
             <div class="table-responsive">
                 <table class="table">
@@ -25,32 +26,46 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Payment By</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" />
+                                    <input type="text" class="form-control" id="payment_by" />
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Remark<span class="text-danger"></span></label>
                                 <div class="col-lg-10">
-                                    <textarea rows="5" cols="5" name="textarea" class="form-control" required="" placeholder="Default textarea"></textarea>
+                                    <textarea rows="5" cols="5" name="textarea" class="form-control" placeholder="Default textarea" id="remark"></textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Amount</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" />
+                                    <input type="text" class="form-control" id="amount"/>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Due Date</label>
                                 <div class="col-lg-10">
-                                    <input class="form-control" type="date" name="date" />
+                                    <input class="form-control" type="date" name="date"  id="paid_date"/>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-form-label col-lg-2">Select Invoice</label>
+                                <label class="col-form-label col-lg-2">Payment status  </label>
                                 <div class="col-lg-10">
-                                    <input type="file" class="form-control h-auto" />
+                                    <div class="mb-4" data-select2-id="189">
+                                        <select data-placeholder="Enter 'as'" class="form-control select2" id="payment_type">
+                                            <option value=""> Select Payment status</option>
+                                            <option value="0">Pending</option>
+                                            <option value="1">Completed</option>
+                                            <option value="3">In-transit</option>
+                                            <option value="4">Failed</option>
+                                        </select>
+                                        <div class="valid-feedback">
+                                            ooks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please select case type
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -75,6 +90,7 @@
             </div>
             <br />
         </div>
+        <div class="success"></div>
         <div class="card-body">
             <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
                 <li class="nav-item">
@@ -104,10 +120,9 @@
                             <div id="DataTables_Table_1_wrapper" class="dataTables_wrapper no-footer">
                                 
                                 <div class="datatable-scroll-wrap">
-                                    <table class="table datatable-responsive-column-controlled dataTable no-footer dtr-column" id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_1_info">
+                                    <table class="table datatable-responsive-column-controlled dataTable no-footer dtr-column" id="DataTables_Table_1">
                                         <thead>
                                             <tr role="row">
-                                                <th class="control sorting_disabled"></th>
                                                 <th class="sorting">Case ID</th>
                                                 <th class="sorting">Client</th>
                                                 <th class="sorting">Invoice Number</th>
@@ -120,30 +135,33 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="odd">
-                                                <td>001</td>
-                                                <td>Cristina</td>
-                                                <td style="">5074.2019</td>
-                                                <td>LKR . 20,000.00</td>
-                                                <td>LKR . 10,000.00</td>
-                                                <td>LKR . 10,000.00</td>
-                                                <td>08/25/2022</td>
-                                                <td><a href="#">Download</a></td>
-                                                <td style="">
-                                                    <div class="list-icons">
-                                                        <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
-                                                        <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
-                                                        <a href="#" class="list-icons-item text-danger"><i class="icon-trash"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @foreach($pendingPayment as $paymentInfo)
+                                                <tr class="odd">
+                                                    <td>{{ $paymentInfo->case_id }}</td>
+                                                    <td>{{ $paymentInfo->case_id }}</td>
+                                                    <td>{{ $paymentInfo->invoice_number }}</td>
+                                                    <td>{{ $paymentInfo->amount }}</td>
+                                                    <td>{{ $paymentInfo->amount }}</td>
+                                                    <td>{{ $paymentInfo->amount }}</td>
+                                                    <td><a href="#">{{ $paymentInfo->date }}</a></td>
+                                                    <td><a href="#">{{ $paymentInfo->date }}</a></td>
+                                                    <td style="">
+                                                        <div class="list-icons">
+                                                            <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
+                                                            <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
+                                                            <a href="#" class="list-icons-item text-danger"><i class="icon-trash"></i></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                                <
                             </div>
                         </div>
                     </div>
+                        <button type="submit" class="btn btn-primary sw-btn-next sw-btn">Next</button>
+                       
                 </div>
 
                 <div class="tab-pane fade" id="justified-icon-only-tab2">
@@ -168,40 +186,23 @@
                                                     <th class="sorting">Full Amount</th>
                                                     <th class="sorting">Paid By</th>
                                                     <th class="sorting">Paid Date</th>
-                                                    <th class="sorting">Payment Type</th>
-                                                    <th class="sorting">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="odd">
-                                                    <td class="dtr-control sorting_1" tabindex="0">PAY-001</td>
-
-                                                    <td style="">5074.2019</td>
-                                                    <td>1505200.00</td>
-                                                    <td>Cristina Galliani</td>
-                                                    <td>2019-12-19</td>
-                                                    <td>online payment</td>
-
-                                                    <td style="">
-                                                        <div class="list-icons">
-                                                            <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
-                                                            <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
-                                                            <a href="#" class="list-icons-item text-danger"><i class="icon-trash"></i></a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                @foreach($pendingPayment as $paymentInfo)
+                                                    <tr class="odd">
+                                                     
+                                                        <td>{{ $paymentInfo->invoice_number }}</td>
+                                                        <td>{{ $paymentInfo->amount }}</td>
+                                                        <td>{{ $paymentInfo->amount }}</td>
+                                                         <td><a href="#">{{ $paymentInfo->payment_by }}</a></td>
+                                                        <td><a href="#">{{ $paymentInfo->date }}</a></td>
+                                                       
+                                                       
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
-                                    </div>
-                                    <div class="datatable-footer">
-                                        <div class="dataTables_info" id="DataTables_Table_1_info" role="status" aria-live="polite">Showing 1 to 10 of 15 entries</div>
-                                        <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_1_paginate">
-                                            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_1" data-dt-idx="0" tabindex="-1" id="DataTables_Table_1_previous">←</a>
-                                            <span>
-                                                <a class="paginate_button current" aria-controls="DataTables_Table_1" data-dt-idx="1" tabindex="0">1</a><a class="paginate_button" aria-controls="DataTables_Table_1" data-dt-idx="2" tabindex="0">2</a>
-                                            </span>
-                                            <a class="paginate_button next" aria-controls="DataTables_Table_1" data-dt-idx="3" tabindex="0" id="DataTables_Table_1_next">→</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -212,3 +213,38 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    $('#paymentChange').on('click',function(e){
+        e.preventDefault();
+        var payment_by    = $('#payment_by').val();
+        var remark        = $('#remark').val();
+        var amount        = $('#amount').val();
+        var date          = $('#paid_date').val();
+        var payment_type  = $('#payment_type').val();
+        var case_id       = $('#case_id').val();
+
+        $.ajax({
+            data: {
+                payment_by : payment_by,
+                remark : remark,
+                amount : amount,
+                date : date,
+                payment_type : payment_type,
+                case_id : case_id,
+                _token: $("input[name='_token']").val() ,
+            },
+            type: "POST",
+            url: window.baseUrl + '/case/payment',
+            success:function(data) {
+                if(data == 200) {
+                    $('#modal_default2').modal().hide();;
+                    $('.modal-backdrop').modal().hide();;
+                      $('.success').html('<div class="alert alert-primary" role="alert">Successfull create payment data!</div>');
+                }
+                
+             
+             }
+        }); 
+    });
+
+</script>

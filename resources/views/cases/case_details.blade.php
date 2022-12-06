@@ -7,11 +7,11 @@
             <div class="form-group row">
                 <label class="col-form-label col-lg-3">Case Type </label>
                 <div class="col-lg-9">
-                    <div class="mb-4" data-select2-id="189">
+                    <div class="mb-4" >
                         <select data-placeholder="Enter 'as'" class="form-control select2" id="case_type">
                             <option data-select2-id="83"> Select case type</option>
                             @foreach($types as $typeInfo)
-                            <option value="{{ $typeInfo->id }}" data-select2-id="199">{{ $typeInfo->name }}</option>
+                            <option value="{{ $typeInfo->id }}"  @if(!empty($caseInfo->type)) @if($typeInfo->id == $caseInfo->type ) selected @endif @endif>{{ $typeInfo->name }}</option>
                             @endforeach
                         </select>
                         <div class="valid-feedback">
@@ -27,7 +27,8 @@
             <div class="form-group row">
                 <label class="col-form-label col-lg-3">Case Title<span class="text-danger">*</span></label>
                 <div class="col-lg-9">
-                    <input type="text" name="basic" class="form-control" required="" placeholder="Case Title" name="case_title" id="case_title">
+                    <input type="text" name="basic" class="form-control" required="" placeholder="Case Title" name="case_title" id="case_title"  @if(!empty($caseInfo->title)) value="{{ $caseInfo->title }}" @endif >
+                    <input type="hidden"  id="case_id"  @if(!empty($caseInfo->id)) value="{{ $caseInfo->id }}" @endif >
                     <div class="valid-feedback">
                         ooks good!
                     </div>
@@ -43,7 +44,7 @@
             <div class="form-group row">
                 <label class="col-form-label col-lg-3">Case description <span class="text-danger">*</span></label>
                 <div class="col-lg-9">
-                    <textarea rows="5" cols="5" name="textarea" class="form-control" required="" placeholder=" Please enter case description" id="case_description"></textarea>
+                    <textarea rows="5" cols="5" name="textarea" class="form-control" required="" placeholder=" Please enter case description" id="case_description">  @if(!empty($caseInfo->description)) {{ $caseInfo->description }} @endif </textarea>
                     <div class="valid-feedback">
                         ooks good!
                     </div>
@@ -86,18 +87,7 @@
                     </div>
                 </div>
             </div>
-            <!--      <div class="form-group row">
-                <label class="col-form-label col-lg-3"> <span class="text-danger"></span></label>
-                <div class="col-lg-9">
-                    <div class="col-lg-9">
-                        <label class="custom-control custom-switch" style="margin-right: 60px;" >
-                            <input type="checkbox" class="custom-control-input"  name="switch_single" required="" checked>
-                            <span class="custom-control-label">Inactive</span>
-                        </label>
-                    </div> 
-                </div>
-            </div> -->
-            <!-- /basic select -->
+         
             <div>
                 <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="submit_data">Submit</button>
             </div>
