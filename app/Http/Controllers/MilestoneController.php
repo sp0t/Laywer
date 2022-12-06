@@ -16,69 +16,44 @@ use Illuminate\Support\Facades\Auth;
 use DataTables;
 use App\Helpers\Functions;
 use Illuminate\Support\Str;
+use Redirect;
 
-class CaseController extends Controller
+
+class MilestoneController extends Controller
 {
     public function index()
     {
         $page_meta = [
-            'page_title'        => 'Cases',
+            'page_title'        => 'Cases Type',
             'page_description'  => '',
             'page_keywords'     => '',
             'page_image'        => '',
             'active_page'       => 'cases'
         ];        
-        return view('cases.index', compact('page_meta'));
+        return view('master_data.cases_type.index', compact('page_meta'));
     }
 
     public function load_ajax(Request $request) {
 
         $input = $request->input();        
-        $cases = Cases::select(['cases.id', 'cases.type', 'cases.title', 'cases.created_at', 'cases.status', 'cases.inactive'])->with(['case_lawyers', 'case_clients']);
 
-        $status     = _case_status();
+        $cases = CaseType::select(['case_types.id', 'case_types.name'])->get();
+
 
         return Datatables::of($cases)
-                        ->editColumn('id', function($obj) {
-                            return str_pad($obj['id'], 4, '0', STR_PAD_LEFT);
-                        })
-                        ->addColumn('lawyers', function($obj) {
-                            return $obj->case_lawyers()->count();
-                        }) 
-                        ->addColumn('clients', function($obj) {
-                            return $obj->case_clients()->count();
-                        })                                                               
-                        ->editColumn('status', function($obj) use($status){
-                            $class = '';
-                            if ($obj->status == 1){
-                                $class = 'badge-primary';
-                            } elseif ($obj->status == 2) {
-                                $class = 'badge-warning';
-                            } elseif ($obj->status == 3) {
-                                $class = 'badge-yellow';
-                            } elseif ($obj->status == 3) {
-                                $class = 'badge-success';                                
-                            } else {
-                                $class = 'badge-light';
-                            }
-                            $html = '<span class="badge '.$class.'">'.$status[$obj->status].'</span>';
-
-                            return $html;
-                        })        
-                        ->editColumn('inactive', function($obj) {
-                            return $obj->inactive == 1 ? '<span class="badge badge-danger">Inactive</span>' : '<span class="badge badge-success">Active</span>';
-                        })
-                        ->editColumn('created_at', function($obj) {
-                            return date('d-m-Y', strtotime($obj->created_at));
-                        })                           
-                        ->addColumn('actions', function($obj) {
-                            return '<div class="list-icons">
-                            <a href="'.route('client.view', [$obj->id]).'" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
-                            <a href="'.route('case.edit', [$obj->id]).'" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
-                            <a href="#" class="list-icons-item text-danger delete-item"><i class="icon-trash"></i></a></div>';
-                        })
-                        ->rawColumns(['status', 'inactive', 'actions'])
-                        ->make(TRUE);
+                ->editColumn('id', function($obj) {
+                    return str_pad($obj['id'], 4, '0', STR_PAD_LEFT);
+                })
+                ->editColumn('created_at', function($obj) {
+                    return date('d-m-Y', strtotime($obj->created_at));
+                })                           
+                ->addColumn('actions', function($obj) {
+                    return '<div class="list-icons">
+                    <a href="'.route('case_type.edit', [$obj->id]).'" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
+                    <a href="#" class="list-icons-item text-danger delete-item"><i class="icon-trash"></i></a></div>';
+                })
+                ->rawColumns(['status', 'inactive', 'actions'])
+                ->make(TRUE);
     }
 
     public function create() {
@@ -92,21 +67,16 @@ class CaseController extends Controller
         ];
 
         $types = CaseType::get();
-        $caseMilestone = CaseMilestone::where('status', 0)->get();
         $lawyers = User::where(['status'=> 1, 'user_type' => 1])->get();
         $clients = Customer::where(['verified'=> 1, 'is_client' => 1, 'inactive' => 0])->get();
 
-        return view('cases.add-new-case-tab', compact('page_meta', 'types', 'lawyers', 'clients', 'caseMilestone'));
+        return view('master_data.cases_type.create', compact('page_meta', 'types', 'lawyers', 'clients'));
     }
 
     public function store(Request $request){
-        
+
         $validator = Validator::make($request->all(), [
-            'type'          => 'required',
-            'title'         => 'required|string|min:5',
-            'description'   => 'required',
-            'lawyers'       => 'required|array',
-            'clients'       => 'required|array'
+            'milestone_title'         => 'required|string|min:4',
         ]);
 
         if ($validator->fails()) {
@@ -115,47 +85,37 @@ class CaseController extends Controller
             
             $input = $request->input();
 
-            $case = new Cases();
+            $case = new CaseMilestone();
 
-            $case->type         = $input['type'];
-            $case->title        = $input['title'];
-            $case->description  = $input['description'];
-            $case->created_by   = Auth::user()->id;
-
+            $case->mpl_id          = 14;
+            $case->title           = $input['milestone_title'];
+            $case->description     = $input['milestone_descraption'];
+            $case->target_date     = $input['date'];
+            $case->status          = 0;
+            $case->created_by      = Auth::user()->id;
+ 
             try {
                 DB::beginTransaction();
                 $case->save();
 
-                $lawyers = $input['lawyers'];
-
-                foreach($lawyers as $lawyer){
-                    $caselawyer = new CaseLawyer();
-                    $caselawyer->case_id    = $case->id;
-                    $caselawyer->lawyer_id  = $lawyer;
-                    $caselawyer->save();
-                }
-
-                $clients = $input['clients'];
-                
-                foreach($clients as $client){
-                    $caseclient = new CaseClient();
-                    $caseclient->case_id        = $case->id;
-                    $caseclient->customer_id    = $client;
-                    $caseclient->save();
-                }
                 DB::commit();
-                $redirect_url = route('case.edit', [$case->id]).'?tab=milestone';
                 \Session::flash('success', 'Case details added successfully.');
-                return response()->json(['status' => TRUE, 'msg' => 'Case added updated successfully.', 'redirect_url' => $redirect_url]);
+
+
+                $caseMilestone = CaseMilestone::where('status', 0)->get();
+               
+                return view('cases.milestone_view', compact(  'caseMilestone'));
+
             } catch (\Exception $e) {
                 DB::rollback();
-                return response()->json(['status' => FALSE, 'msg' => 'Error occured while saving...', 'e' => $e]);
+                 return Redirect::to('cases/type');
             }
         }
     }
 
-    public function edit(Request $request, $id){
-        $case = Cases::with(['case_lawyers', 'case_clients'])->findOrFail($id);
+    public function editInfo(Request $request, $id){
+       
+        $case = CaseType::findOrFail($id);
 
         $page_meta = [
             'page_title'        => 'Edit Case',
@@ -164,99 +124,39 @@ class CaseController extends Controller
             'page_image'        => '',
             'active_page'       => 'cases'
         ];
-        $input = $request->input();        
-        $tab                = isset($input['tab']) ? $input['tab'] : null;
-        $types              = CaseType::pluck('name', 'id');
-        $lawyers            = User::where(['status'=> 1, 'user_type' => 1])->pluck('name', 'id');
-        $clients            = Customer::where(['verified'=> 1, 'is_client' => 1, 'inactive' => 0])->pluck('name', 'id');
-        $status             = _case_status();
-        $milestone_status   = _case_milestone_status();
 
-        return view('cases.edit', compact('page_meta', 'case', 'types', 'lawyers', 'clients', 'status', 'milestone_status', 'tab'));        
+
+        return view('master_data.cases_type.edit', compact('page_meta', 'case'));        
     }
 
     public function update(Request $request, $id){
         
         $validator = Validator::make($request->all(), [
-            'type'          => 'required',
-            'title'         => 'required|string|min:5',
-            'description'   => 'required',
-            'lawyers'       => 'required|array',
-            'clients'       => 'required|array'
+            'name'         => 'required|string|min:5',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => FALSE, 'msg' => implode('<br>', $validator->errors()->all())]);
         } else {
             
-            $input = $request->input();
+                $input = $request->input();
+                $case = CaseType::findOrFail($id);
+                $case->name         = $input['name'];
 
-            $case = Cases::with(['case_lawyers', 'case_clients'])->findOrFail($id);
+                try {
+                    DB::beginTransaction();
+                    $case->save();
 
-            $case->type         = $input['type'];
-            $case->title        = $input['title'];
-            $case->description  = $input['description'];
-            $case->status       = $input['status'];
-            $case->inactive     = isset($input['inactive']) ? 1 : 0;
+                    DB::commit();
+                    \Session::flash('success', 'Case details added successfully.');
 
-            try {
-                DB::beginTransaction();
-                $case->save();
+                    return Redirect::to('cases/type');
 
-                $lawyers_old = $case->case_lawyers()->pluck('lawyer_id')->toArray();
-                $lawyers = $input['lawyers'];
-
-                $compared = $this->_compare_selections($lawyers_old, $lawyers);
-
-                if(sizeof($compared[0]) > 0){
-                    foreach($compared[0] as $lawyer){
-                        $caselawyer = CaseLawyer::where(['case_id' => $case->id, 'lawyer_id' => $lawyer])->first();
-                        if(!is_null($caselawyer)){
-                            $caselawyer->delete();    
-                        }  
-                    }
+                } catch (\Exception $e) {
+                    DB::rollback();
+                     return Redirect::to('cases/type');
                 }
-
-                if(sizeof($compared[1]) > 0){
-                    foreach($compared[1] as $lawyer){
-                        $caselawyer = new CaseLawyer();
-                        $caselawyer->case_id    = $case->id;
-                        $caselawyer->lawyer_id  = $lawyer;
-                        $caselawyer->save();
-                    }                    
-                }   
-
-                $clients_old = $case->case_clients()->pluck('customer_id')->toArray();
-                $clients = $input['clients'];
-
-                $compared = $this->_compare_selections($clients_old, $clients);
-
-                if(sizeof($compared[0]) > 0){
-                    foreach($compared[0] as $client){
-                        $caseclient = CaseClient::where(['case_id' => $case->id, 'customer_id' => $client])->first();
-                        if(!is_null($caseclient)){
-                            $caseclient->delete();    
-                        }  
-                    }
-                }
-
-                if(sizeof($compared[1]) > 0){
-                    foreach($compared[1] as $client){
-                        $caseclient = new CaseClient();
-                        $caseclient->case_id        = $case->id;
-                        $caseclient->customer_id    = $client;
-                        $caseclient->save();
-                    }                    
-                }         
-                
-                DB::commit();
-                \Session::flash('success', 'Case details updated successfully.');
-                return response()->json(['status' => TRUE, 'msg' => 'Case details updated successfully.']);
-            } catch (\Exception $e) {
-                DB::rollback();
-                dd($e);
-                return response()->json(['status' => FALSE, 'msg' => 'Error occured while saving...', 'e' => $e]);
-            }
+           
         }
     }
 

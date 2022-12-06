@@ -55,9 +55,16 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/cases/load_ajax', 'CaseController@load_ajax')->name('case.load_ajax'); 
     Route::get('/cases/add', 'CaseController@create')->name('case.create');
     Route::post('/cases/add', 'CaseController@store')->name('case.store');
+
+    Route::resource('cases/type', 'CaseTypeController');
+    Route::post('/cases/type', 'CaseTypeController@store')->name('case_type.store');
+    Route::get('/case/type/{id}/edit', 'CaseTypeController@editInfo')->name('case_type.edit')->where('id', '[0-9]+');
+    Route::get('/cases_type/load_ajax', 'CaseTypeController@load_ajax')->name('cases_type.load_ajax'); 
+
     Route::get('/cases/{id}/edit', 'CaseController@edit')->name('case.edit')->where('id', '[0-9]+');
     Route::patch('/cases/{id}/edit', 'CaseController@update')->name('case.update')->where('id', '[0-9]+');
     // Route::get('/clients/{id}/view', 'ClientController@view')->name('client.view')->where('id', '[0-9]+');    
+    // 
 
     Route::get('/cases/{id}/milestones/add', 'CaseController@milestone_popup')->name('case.milestones.add')->where('id', '[0-9]+');
     Route::get('/cases/{id}/milestones/{milestone}', 'CaseController@milestone_popup')->name('case.milestones.edit')->where('id', '[0-9]+')->where('milestone', '[0-9]+');
@@ -74,6 +81,12 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/blog/{id}/view', 'BlogController@view')->name('blog.view')->where('id', '[0-9]+');
     Route::get('/blog/{id}/edit', 'BlogController@edit')->name('blog.edit')->where('id', '[0-9]+');
     Route::patch('/blog/{id}/edit', 'BlogController@update')->name('blog.update')->where('id', '[0-9]+');    
+
+    Route::get('/milestone', 'MilestoneController@index')->name('milestone.index');
+    Route::get('/milestones/load_ajax', 'MilestoneController@load_ajax')->name('milestone.load_ajax'); 
+    Route::get('/milestones/add', 'MilestoneController@create')->name('milestone.create');
+    Route::post('/milestone', 'MilestoneController@store')->name('milestone.store');
+
 
     //Banners - 2022/10/25
     Route::get('/banners', 'BannerController@index')->name('mpl.admin.banners.index');

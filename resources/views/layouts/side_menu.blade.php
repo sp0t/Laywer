@@ -103,6 +103,10 @@
 			</ul>
 		</li>
 		<li class="nav-item">
+        	<a href="{{ url('cases/type' ) }}" class="nav-link"><i class="icon-phone"></i> <span>Case type</span></a>
+        </li>
+   
+		<li class="nav-item">
 			<a href="{{route('mpl.admin.banners.index')}}" class="nav-link"><i class="icon-pencil3"></i> <span>Mobile Banners</span></a>
 		</li>
 		<li class="nav-item">
