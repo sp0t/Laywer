@@ -31,7 +31,7 @@ class DropzoneController extends Controller
         $image->move(public_path('images'),$imageName);
 
         $caseDocuments = new CaseDocuments();
-        $caseDocuments->case_id = 14;
+        $caseDocuments->case_id =  $request->get('case_id_dcoument');
         $caseDocuments->document_name = $imageName;
         $caseDocuments->save();
 

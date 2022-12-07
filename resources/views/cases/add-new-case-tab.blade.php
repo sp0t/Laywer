@@ -92,7 +92,7 @@
                                     <i class="fa fa-upload" aria-hidden="true"></i>
                                 </div>
 
-
+                                    <input type="hidden" @if(!empty($caseInfo->id)) value="{{ $caseInfo->id }}" @endif name="case_id_dcoument">
                                 {!! Form::close() !!}
                             </div>
                         </div>
@@ -150,7 +150,7 @@
     <script type="text/javascript">
         Dropzone.options.imageUpload = {
             maxFilesize         :       1,
-            acceptedFiles: ".jpeg,.jpg,.png,.gif"
+            acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf"
         };
     </script>
 
