@@ -29,6 +29,7 @@
            
             <td>
                 <div class="list-icons">
+                    <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
                     <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
                     <a href="#" class="list-icons-item text-danger"><i class="icon-trash"></i></a>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Models\CaseDocuments;
+use App\Models\CaseMilestone;
 use Illuminate\Support\Facades\Auth;
 
 class DropzoneController extends Controller
@@ -41,5 +42,16 @@ class DropzoneController extends Controller
 
         return response()->json(['success'=>$imageName]);
     }
+
+    public function caseDocumentDelete(Request $request) {
+        CaseDocuments::findOrFail($request->get('id'))->delete();
+
+    }
+   
+    public function caseMilestoneDelete(Request $request) {
+        CaseMilestone::findOrFail($request->get('id'))->delete();
+
+    }
+
    
 }

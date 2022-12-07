@@ -400,6 +400,7 @@ class CaseController extends Controller
     }
 
     public function milestone_popup_view($id, $milestone = null){
+
         $item = null;
         $view = true;
         if(!is_null($milestone)){
@@ -488,5 +489,17 @@ class CaseController extends Controller
                 return response()->json(['status' => FALSE, 'msg' => 'Error occured while saving...', 'e' => $e]);
             }            
         }
+    }
+    
+    /**
+     * [caseFinalSubmit description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function caseFinalSubmit(Request $request) {
+
+        $case =  Cases::findOrFail($request->case_id);
+        $case->status = 1;
+        $case->save();
     }
 }

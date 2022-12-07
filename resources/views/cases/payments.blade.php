@@ -160,7 +160,7 @@
                             </div>
                         </div>
                     </div>
-                        <button type="submit" class="btn btn-primary sw-btn-next sw-btn">Next</button>
+                        <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="saveFinalSubmit">Save</button>
                        
                 </div>
 
@@ -214,6 +214,7 @@
     </form>
 </div>
 <script type="text/javascript">
+
     $('#paymentChange').on('click',function(e){
         e.preventDefault();
         var payment_by    = $('#payment_by').val();
@@ -247,4 +248,30 @@
         }); 
     });
 
+     $('#saveFinalSubmit').on('click',function(e){
+        e.preventDefault();
+        var payment_by    = $('#payment_by').val();
+        var remark        = $('#remark').val();
+        var amount        = $('#amount').val();
+        var date          = $('#paid_date').val();
+        var payment_type  = $('#payment_type').val();
+        var case_id       = $('#case_id').val();
+
+        $.ajax({
+            data: {
+                payment_by : payment_by,
+                remark : remark,
+                amount : amount,
+                date : date,
+                payment_type : payment_type,
+                case_id : case_id,
+                _token: $("input[name='_token']").val() ,
+            },
+            type: "POST",
+            url: window.baseUrl + '/casefinal/submit',
+            success:function(data) {
+               // window.location.replace( window.baseUrl + '/cases');
+            }
+        }); 
+    });
 </script>

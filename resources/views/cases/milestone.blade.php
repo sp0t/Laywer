@@ -58,7 +58,7 @@
                     </thead>
                     <tbody>
                         @foreach($caseMilestone as $caseMilestoneInfo)
-                        <tr class="odd">
+                        <tr class="milestone_{{ $caseMilestoneInfo->id }}">
                             <td class="sorting_1">#{{ $caseMilestoneInfo->id }}</td>
 
                             <td>
@@ -78,7 +78,7 @@
                                 <div class="list-icons">
                                     <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
                                     <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
-                                    <a href="#" class="list-icons-item text-danger"><i class="icon-trash"></i></a>
+                                    <a href=" javascript:void(0)" class="list-icons-item text-danger delete-item" onclick="deleteMilestone('{{ $caseMilestoneInfo->id }}')"><i class="icon-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -98,6 +98,20 @@
 </div>
 
 <script type="text/javascript">
+       function deleteMilestone(id) {
+        $.ajax({
+            data: {
+                id : id,
+                _token: $("input[name='_token']").val() ,
+            },
+            type: "POST",
+            url: window.baseUrl + '/case/milestone/delete',
+            success:function(data) {
+               $('.milestone_'+ id).hide(data);
+             }
+        }); 
+    }
+
     $('#addMewMileStone').on('click',function(e){
         e.preventDefault();
         var milestone_title         = $('#milestone_title').val();

@@ -100,7 +100,12 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::get('dropzone', 'DropzoneController@dropzone');
     Route::post('dropzone/store', 'DropzoneController@dropzoneStore')->name('dropzone.store');
+    Route::post('case/documents/delete', 'DropzoneController@caseDocumentDelete')->name('dropzone.delete');
+    Route::post('case/milestone/delete', 'DropzoneController@caseMilestoneDelete')->name('milestone.delete');
+    Route::post('casefinal/submit', 'CaseController@caseFinalSubmit')->name('case_type.submit');
 });
+
+
 
 Route::get('/homedd',function(){
     return view('layouts.auth2');

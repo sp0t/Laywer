@@ -89,47 +89,7 @@
             <div class="tab-content">
                 @include('cases.case_details')
                 @include('cases.milestone')
-                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
-                   <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                {!! Form::open([ 'route' => [ 'dropzone.store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'image-upload' ]) !!}
-                                <div class="drag-and-drop-division">
-                                    <h3 class="drag-and-drop">Drag and drop</h3>
-                                    <i class="fa fa-upload" aria-hidden="true"></i>
-                                </div>
-
-                                    <input type="hidden" id="case_id_dcoument" @if(!empty($caseInfo->id)) value="{{ $caseInfo->id }}" @endif name="case_id_dcoument">
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="document_list" id="resultOfDocument">
-                       <table class="table">
-                            <tbody>
-                                @foreach($documentList as $documentInfo)
-                                <tr>
-                                    <td>{{ $documentInfo->document_name }} </td>
-                                    <td>{{ $documentInfo->date }} </td>
-                                    <td>{{ $documentInfo->userName }} </td>
-                                    <td>{{ $documentInfo->created_at }} </td>
-
-                                    <td> <div class="list-icons">
-                                        <a href="'.route('client.view', [$obj->id]).'" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
-                                      
-                                        <a href="#" class="list-icons-item text-danger delete-item"><i class="icon-trash"></i></a></div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                          </tbody>
-                        </table>
-                     
-                    </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="submit_data">Submit</button>
-                    </div>
-                </div>
-
+                @include('cases.document')
                 @include('cases.payments')
                 
             </div>
