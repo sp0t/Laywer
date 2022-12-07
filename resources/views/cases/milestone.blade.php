@@ -53,7 +53,6 @@
                             <th>#</th>
                             <th>Milestone Title/Description</th>
                             <th>Due Date</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -73,17 +72,7 @@
                                    {{ $caseMilestoneInfo->target_date }}
                                 </div>
                             </td>
-                            <td>
-                                <select name="status" class="custom-select">
-                                    <option value="open">Open</option>
-                                    <option value="hold">On hold</option>
-                                    <option value="resolved" selected="selected">Resolved</option>
-                                    <option value="dublicate">Dublicate</option>
-                                    <option value="invalid">Invalid</option>
-                                    <option value="wontfix">Wontfix</option>
-                                    <option value="closed">Closed</option>
-                                </select>
-                            </td>
+                         
                            
                             <td>
                                 <div class="list-icons">
@@ -114,12 +103,14 @@
         var milestone_title         = $('#milestone_title').val();
         var date                    = $('#date').val();
         var milestone_descraption   = $('#milestone_descraption').val();
+        var case_id   = $('#case_id').val();
 
         $.ajax({
             data: {
                 milestone_title : milestone_title,
                 milestone_descraption : milestone_descraption,
                 date : date,
+                case_id : case_id,
                 _token: $("input[name='_token']").val() ,
             },
             type: "POST",

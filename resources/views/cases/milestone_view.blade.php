@@ -4,7 +4,6 @@
             <th>#</th>
             <th>Milestone Title/Description</th>
             <th>Due Date</th>
-            <th>Status</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -26,21 +25,10 @@
                    {{ $caseMilestoneInfo->target_date }}
                 </div>
             </td>
-            <td>
-                <select name="status" class="custom-select">
-                    <option value="open">Open</option>
-                    <option value="hold">On hold</option>
-                    <option value="resolved" selected="selected">Resolved</option>
-                    <option value="dublicate">Dublicate</option>
-                    <option value="invalid">Invalid</option>
-                    <option value="wontfix">Wontfix</option>
-                    <option value="closed">Closed</option>
-                </select>
-            </td>
+    
            
             <td>
                 <div class="list-icons">
-                    <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
                     <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
                     <a href="#" class="list-icons-item text-danger"><i class="icon-trash"></i></a>
                 </div>

@@ -10,6 +10,7 @@ use App\Models\CaseType;
 use App\Models\CaseLawyer;
 use App\Models\CaseClient;
 use App\Models\CaseMilestone;
+use App\Models\CaseDocuments;
 use App\Models\CasePayment;
 use App\Models\User;
 use App\Models\Customer;
@@ -96,20 +97,38 @@ class CaseController extends Controller
             ->where('case_payments.status', 0)
             ->select('case_payments.*','cases.title')
             ->get();
+
         $completedPayment = CasePayment::where('status', 1)->get();
 
         $types         = CaseType::get();
         $caseMilestone = CaseMilestone::where('status', 0)->get();
+
         $caseInfo      = Cases::where('status', 0)
             ->where('created_by', Auth::user()->id)
             ->orderBy('id', 'desc')
             ->first();
 
-        
+        $cleintInfo        = [];
+        $CaseLawyerInfo    = [];
+        $documentList    = [];
+        if(!empty($caseInfo )) {
+
+            $cleintInfo     = CaseClient::where('case_id', $caseInfo->id)->get();
+            $CaseLawyerInfo = CaseLawyer::where('case_id', $caseInfo->id)->get();
+            $caseMilestone  = CaseMilestone::where('status', 0)
+                ->where('mpl_id', $caseInfo->id)
+                ->get();
+
+            $documentList = CaseDocuments::where('case_id', $caseInfo->id)
+                        ->leftjoin('users','case_documents.created_by','=','users.id')
+                        ->select('users.name as userName','case_documents.*')
+                        ->get();
+        }
+ 
         $lawyers       = User::where(['status'=> 1, 'user_type' => 1])->get();
         $clients       = Customer::where(['verified'=> 1, 'is_client' => 1, 'inactive' => 0])->get();
 
-        return view('cases.add-new-case-tab', compact('page_meta', 'types', 'lawyers', 'clients', 'caseMilestone', 'pendingPayment', 'completedPayment', 'caseInfo'));
+        return view('cases.add-new-case-tab', compact('page_meta', 'types', 'lawyers', 'clients', 'caseMilestone', 'pendingPayment', 'completedPayment', 'caseInfo', 'CaseLawyerInfo', 'cleintInfo','documentList'));
     }
 
     public function store(Request $request){
@@ -128,8 +147,13 @@ class CaseController extends Controller
             
             $input = $request->input();
 
-            $case = new Cases();
+            if(!empty($input['case_id'])) {
+                $case =  Cases::findOrFail($input['case_id']);
+            } else {
+               $case = new Cases(); 
+            }
 
+            
             $case->type         = $input['type'];
             $case->title        = $input['title'];
             $case->description  = $input['description'];
@@ -157,9 +181,10 @@ class CaseController extends Controller
                     $caseclient->save();
                 }
                 DB::commit();
+
                 $redirect_url = route('case.edit', [$case->id]).'?tab=milestone';
                 \Session::flash('success', 'Case details added successfully.');
-                return response()->json(['status' => TRUE, 'msg' => 'Case added updated successfully.', 'redirect_url' => $redirect_url]);
+                return response()->json(['status' => TRUE, 'msg' => 'Case added updated successfully.', 'redirect_url' => $redirect_url, 'case_id' =>  $case->id ]);
             } catch (\Exception $e) {
                 DB::rollback();
                 return response()->json(['status' => FALSE, 'msg' => 'Error occured while saving...', 'e' => $e]);

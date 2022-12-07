@@ -87,7 +87,7 @@ class MilestoneController extends Controller
 
             $case = new CaseMilestone();
 
-            $case->mpl_id          = 14;
+            $case->mpl_id          = $input['case_id'];
             $case->title           = $input['milestone_title'];
             $case->description     = $input['milestone_descraption'];
             $case->target_date     = $input['date'];
@@ -102,7 +102,9 @@ class MilestoneController extends Controller
                 \Session::flash('success', 'Case details added successfully.');
 
 
-                $caseMilestone = CaseMilestone::where('status', 0)->get();
+                $caseMilestone = CaseMilestone::where('status', 0)
+                    ->where('mpl_id', $input['case_id'])
+                    ->get();
                
                 return view('cases.milestone_view', compact(  'caseMilestone'));
 

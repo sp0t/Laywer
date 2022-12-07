@@ -67,7 +67,7 @@
                         <select class="form-control " multiple="" id="lawyers" required>
                             <option value="">Select lawyers</option>
                             @foreach($lawyers as $typeInfo)
-                            <option value="{{ $typeInfo->id }}" data-select2-id="199">{{ $typeInfo->name }}</option>
+                            <option value="{{ $typeInfo->id }}" @foreach($CaseLawyerInfo as $lawerInfo) @if($typeInfo->id ==$lawerInfo->lawyer_id)  selected @endif @endforeach>{{ $typeInfo->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -81,19 +81,20 @@
                         <select class="form-control select2" multiple=""  id="clients" required>
                             <option value="">Select Clients</option>
                              @foreach($clients as $typeInfo)
-                            <option value="{{ $typeInfo->id }}" data-select2-id="199">{{ $typeInfo->name }}</option>
+                            <option value="{{ $typeInfo->id }}" @foreach($cleintInfo as $clientInfo) @if($typeInfo->id ==$clientInfo->customer_id)  selected @endif @endforeach>{{ $typeInfo->name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
             </div>
          
-            <div>
-                <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="submit_data">Submit</button>
-            </div>
+          
         </fieldset>
     
    </form>
+    <div>
+        <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="submit_data">Submit</button>
+    </div>
 </div>
 <script type="text/javascript">
     $('#submit_data').on('click',function(e){
@@ -103,6 +104,7 @@
             var case_description   = $('#case_description').val();
             var lawyers            = $('#lawyers').val();
             var clients            = $('#clients').val();
+            var case_id            = $('#case_id').val();
       
             $.ajax({
                 data: {
@@ -111,13 +113,15 @@
                     description : case_description,
                     lawyers : lawyers,
                     clients : clients,
+                    case_id : case_id,
                     _token: $("input[name='_token']").val() ,
                 },
                 type: "POST",
                 dataType:'JSON',
                 url: window.baseUrl + '/cases/add',
                 success:function(data) {
-                    
+                    $('#case_id').val(data.case_id);
+                    $('#case_id_dcoument ').val(data.case_id);
                    
                  }
             }); 

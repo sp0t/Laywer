@@ -24,7 +24,14 @@
 <!-- Animate CSS for the css animation support if needed -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
 
-
+<style>
+    td {
+        border: 0px ;
+    }
+    div#resultOfDocument {
+        margin-bottom: 24px;
+    }
+</style>
 @endsection
 @section('dashname')
     <div class="page-header page-header-light">
@@ -92,12 +99,37 @@
                                     <i class="fa fa-upload" aria-hidden="true"></i>
                                 </div>
 
-                                    <input type="hidden" @if(!empty($caseInfo->id)) value="{{ $caseInfo->id }}" @endif name="case_id_dcoument">
+                                    <input type="hidden" id="case_id_dcoument" @if(!empty($caseInfo->id)) value="{{ $caseInfo->id }}" @endif name="case_id_dcoument">
                                 {!! Form::close() !!}
                             </div>
                         </div>
                     </div>
+                    <div class="document_list" id="resultOfDocument">
+                       <table class="table">
+                            <tbody>
+                                @foreach($documentList as $documentInfo)
+                                <tr>
+                                    <td>{{ $documentInfo->document_name }} </td>
+                                    <td>{{ $documentInfo->date }} </td>
+                                    <td>{{ $documentInfo->userName }} </td>
+                                    <td>{{ $documentInfo->created_at }} </td>
+
+                                    <td> <div class="list-icons">
+                                        <a href="'.route('client.view', [$obj->id]).'" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
+                                      
+                                        <a href="#" class="list-icons-item text-danger delete-item"><i class="icon-trash"></i></a></div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                          </tbody>
+                        </table>
+                     
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="submit_data">Submit</button>
+                    </div>
                 </div>
+
                 @include('cases.payments')
                 
             </div>
