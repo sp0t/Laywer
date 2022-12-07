@@ -6,6 +6,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Models\CaseDocuments;
 use App\Models\CaseMilestone;
+use App\Models\CasePayment;
 use Illuminate\Support\Facades\Auth;
 
 class DropzoneController extends Controller
@@ -53,5 +54,8 @@ class DropzoneController extends Controller
 
     }
 
+    public function casePaymentDelete(Request $request) {
+        CasePayment::findOrFail($request->get('id'))->delete();
+    }
    
 }

@@ -24,9 +24,15 @@
 
                         <div class="modal-body">
                             <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Invoice Number</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="invoice_number" value="{{ date('Ymdhim') }}" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Payment By</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="payment_by" />
+                                    <input type="text" class="form-control" id="payment_by" readonly value="{{  Auth::user()->name }}" />
                                 </div>
                             </div>
 
@@ -54,7 +60,7 @@
                                     <div class="mb-4" data-select2-id="189">
                                         <select data-placeholder="Enter 'as'" class="form-control select2" id="payment_type">
                                             <option value=""> Select Payment status</option>
-                                            <option value="1">Online Paymen</option>
+                                            <option value="1">Online Payment</option>
                                             <option value="2">Bank Deposit</option>
                                         </select>
                                         <div class="valid-feedback">
@@ -137,42 +143,42 @@
                             <div id="DataTables_Table_1_wrapper" class="dataTables_wrapper no-footer">
                                 
                                 <div class="datatable-scroll-wrap">
-                                    <table class="table datatable-responsive-column-controlled dataTable no-footer dtr-column" id="DataTables_Table_1">
-                                        <thead>
-                                            <tr role="row">
-                                                <th class="sorting">Case ID</th>
-                                                <th class="sorting">Client</th>
-                                                <th class="sorting">Invoice Number</th>
-                                                <th class="sorting">Full Amount</th>
-                                                <th class="sorting">Paid Amount</th>
-                                                <th class="sorting">Balance</th>
-                                                <th class="sorting">Due Date</th>
-                                                <th class="sorting">Invoice</th>
-                                                <th class="text-center sorting_disabled">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($pendingPayment as $paymentInfo)
-                                                <tr class="odd">
-                                                    <td>{{ $paymentInfo->case_id }}</td>
-                                                    <td>{{ $paymentInfo->case_id }}</td>
-                                                    <td>{{ $paymentInfo->invoice_number }}</td>
-                                                    <td>{{ $paymentInfo->amount }}</td>
-                                                    <td>{{ $paymentInfo->amount }}</td>
-                                                    <td>{{ $paymentInfo->amount }}</td>
-                                                    <td><a href="#">{{ $paymentInfo->date }}</a></td>
-                                                    <td><a href="#">{{ $paymentInfo->date }}</a></td>
-                                                    <td style="">
-                                                        <div class="list-icons">
-                                                            <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
-                                                            <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
-                                                            <a href="#" class="list-icons-item text-danger"><i class="icon-trash"></i></a>
-                                                        </div>
-                                                    </td>
+                                    <table class="table datatable-responsive-column-controlled dataTable no-footer dtr-column" id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_1_info">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th class="sorting">Payment ID</th>
+                                                    <th class="sorting">Invoice No</th>
+                                                    <th class="sorting">Total amount</th>
+                                                    <th class="sorting">Paid Amount</th>
+                                                    <th class="sorting">Balance</th>
+                                                    <th class="sorting">Last payment date</th>
+                                                    <th class="sorting">Due Date</th>
+                                                    <th class="sorting">Invoice</th>
+                                                    <th class="sorting">Action</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($pendingPayment as $paymentInfo)
+                                                    <tr class="payment_{{ $paymentInfo->id }}">
+                                                        <td>{{ $paymentInfo->invoice_number }}</td>
+                                                        <td>{{ $paymentInfo->invoice_number }}</td>
+                                                        <td>{{ $paymentInfo->amount }}</td>
+                                                        <td>{{ $paymentInfo->amount }}</td>
+                                                        <td>{{ $paymentInfo->amount }}</td>
+                                                        <td><a href="#">{{ $paymentInfo->payment_by }}</a></td>
+                                                        <td><a href="#">{{ $paymentInfo->date }}</a></td>
+                                                        <td><a href="#">{{ $paymentInfo->date }}</a></td>
+                                                        <td>
+                                                            <div class="list-icons">
+                                                                <a href="#" class="list-icons-item text-teal"><i class="icon-eye"></i></a>
+                                                                <a href="#" class="list-icons-item text-primary"><i class="icon-pencil7"></i></a>
+                                                                <a href=" javascript:void(0)" class="list-icons-item text-danger delete-item" onclick="deletepayment('{{ $paymentInfo->id }}')"><i class="icon-trash"></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                 </div>
                             </div>
                         </div>
@@ -196,12 +202,9 @@
                                         <table class="table datatable-responsive-column-controlled dataTable no-footer dtr-column" id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_1_info">
                                             <thead>
                                                 <tr role="row">
-                                                    <th class="sorting sorting_asc">
-                                                        Payment ID
-                                                    </th>
                                                     <th class="sorting">Payment ID</th>
                                                     <th class="sorting">Remarks</th>
-                                                    <th class="sorting"> Amount</th>
+                                                    <th class="sorting">Amount</th>
                                                     <th class="sorting">Paid By</th>
                                                     <th class="sorting">Paid Date</th>
                                                     <th class="sorting">Payment type</th>
@@ -210,14 +213,12 @@
                                             <tbody>
                                                 @foreach($pendingPayment as $paymentInfo)
                                                     <tr class="odd">
-                                                     
                                                         <td>{{ $paymentInfo->invoice_number }}</td>
                                                         <td>{{ $paymentInfo->amount }}</td>
                                                         <td>{{ $paymentInfo->amount }}</td>
-                                                         <td><a href="#">{{ $paymentInfo->payment_by }}</a></td>
+                                                        <td><a href="#">{{ $paymentInfo->payment_by }}</a></td>
                                                         <td><a href="#">{{ $paymentInfo->date }}</a></td>
-                                                       
-                                                       
+                                                        <td><a href="#">{{ $paymentInfo->date }}</a></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -233,6 +234,20 @@
     </form>
 </div>
 <script type="text/javascript">
+       function deletepayment(id) {
+        $.ajax({
+            data: {
+                id : id,
+                _token: $("input[name='_token']").val() ,
+            },
+            type: "POST",
+            url: window.baseUrl + '/case/payment/delete',
+            success:function(data) {
+               $('.payment_'+ id).hide(data);
+             }
+        }); 
+    }
+
 
     $('#paymentChange').on('click',function(e){
         e.preventDefault();

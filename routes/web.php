@@ -97,11 +97,11 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/banners/{id}/edit', 'BannerController@edit')->name('mpl.admin.banners.edit')->where('id', '[0-9]+');
     Route::patch('/banners/{id}/edit', 'BannerController@update')->name('mpl.admin.banners.update')->where('id', '[0-9]+');    
     Route::get('/banners/{id}/view', 'BannerController@view')->name('mpl.admin.banners.view')->where('id', '[0-9]+');
-
     Route::get('dropzone', 'DropzoneController@dropzone');
     Route::post('dropzone/store', 'DropzoneController@dropzoneStore')->name('dropzone.store');
     Route::post('case/documents/delete', 'DropzoneController@caseDocumentDelete')->name('dropzone.delete');
     Route::post('case/milestone/delete', 'DropzoneController@caseMilestoneDelete')->name('milestone.delete');
+    Route::post('case/payment/delete', 'DropzoneController@casePaymentDelete')->name('payment.delete');
     Route::post('casefinal/submit', 'CaseController@caseFinalSubmit')->name('case_type.submit');
 });
 
