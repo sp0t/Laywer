@@ -49,15 +49,32 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Payment Type  </label>
+                                <div class="col-lg-10">
+                                    <div class="mb-4" data-select2-id="189">
+                                        <select data-placeholder="Enter 'as'" class="form-control select2" id="payment_type">
+                                            <option value=""> Select Payment status</option>
+                                            <option value="1">Online Paymen</option>
+                                            <option value="2">Bank Deposit</option>
+                                        </select>
+                                        <div class="valid-feedback">
+                                            ooks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please select case type
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Payment status  </label>
                                 <div class="col-lg-10">
                                     <div class="mb-4" data-select2-id="189">
                                         <select data-placeholder="Enter 'as'" class="form-control select2" id="payment_type">
                                             <option value=""> Select Payment status</option>
                                             <option value="0">Pending</option>
-                                            <option value="1">Completed</option>
-                                            <option value="3">In-transit</option>
-                                            <option value="4">Failed</option>
+                                            <option value="1">Paid</option>
+                                            <option value="3">Re fund</option>
                                         </select>
                                         <div class="valid-feedback">
                                             ooks good!
