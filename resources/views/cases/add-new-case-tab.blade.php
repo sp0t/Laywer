@@ -21,37 +21,33 @@
 <!-- /theme JS files -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     
-    <!-- Animate CSS for the css animation support if needed -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
+<!-- Animate CSS for the css animation support if needed -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
 
 
 @endsection
 @section('dashname')
-<div class="page-header page-header-light">
-    <div class="breadcrumb-line breadcrumb-line-light header-elements-lg-inline">
-        <div class="d-flex">
-            <div class="breadcrumb">
-                <a href="/" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
-                <span class="breadcrumb-item active"> <a href="/addnewcase" class="breadcrumb-item">Cases</a> / Add New Case</span>
+    <div class="page-header page-header-light">
+        <div class="breadcrumb-line breadcrumb-line-light header-elements-lg-inline">
+            <div class="d-flex">
+                <div class="breadcrumb">
+                    <a href="/" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
+                    <span class="breadcrumb-item active"> <a href="/addnewcase" class="breadcrumb-item">Cases</a> / Add New Case</span>
+                </div>
+                <a href="#" class="header-elements-toggle text-body d-lg-none"><i class="icon-more"></i></a>
             </div>
-            <a href="#" class="header-elements-toggle text-body d-lg-none"><i class="icon-more"></i></a>
-        </div>
-        <div class="header-elements d-none">
-            <div class="breadcrumb justify-content-center">
-                <div class="breadcrumb-elements-item dropdown p-0"> </div>
+            <div class="header-elements d-none">
+                <div class="breadcrumb justify-content-center">
+                    <div class="breadcrumb-elements-item dropdown p-0"> </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @section('content')
     <!-- Include SmartWizard CSS -->
-    <link href="{{ URL::asset( 'dist/css/demo.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ URL::asset( 'dist/css/smart_wizard_all.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <br>
+     <br>
     <div class="container">
         <!-- SmartWizard html -->
         <div id="smartwizard" dir="rtl-">
@@ -68,47 +64,52 @@
                         Milestone
                   </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#step-3">
-                        <!-- <span class="num">3</span> -->
-                        Payments
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="#step-4">
+                  <li class="nav-item">
+                    <a class="nav-link " href="#step-3">
                         <!-- <span class="num">4</span> -->
                         Document
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#step-4">
+                        <!-- <span class="num">3</span> -->
+                        Payments
+                    </a>
+                </li>
+              
             </ul>
 
             <div class="tab-content">
                 @include('cases.case_details')
                 @include('cases.milestone')
-                @include('cases.payments')
-                <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
-                    <form id="form-4" class="row row-cols-1 ms-5 me-5 needs-validation" novalidate>
-                        <div class="phppot-container">
-                            <div id="drop-area">
-                                <h3 class="drop-text">Drop images here to upload</h3>
-                            </div>
-                            <div id="loader-icon">
-                                <img src="loader.gif" />
-                            </div>
-                            <div id="success-message-info" class="message success display-none"></div>
-                        </div>
-                    </form>  
-                </div>
-            </div>
+                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                   <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {!! Form::open([ 'route' => [ 'dropzone.store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'image-upload' ]) !!}
+                                <div class="drag-and-drop-division">
+                                    <h3 class="drag-and-drop">Drag and drop</h3>
+                                    <i class="fa fa-upload" aria-hidden="true"></i>
+                                </div>
 
+
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @include('cases.payments')
+                
+            </div>
             <div class="progress">
               <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>
-
-
         <br /> &nbsp;
     </div>
+
+
+
 
     <!-- Confirm Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -142,74 +143,18 @@
 
     <script type="text/javascript" src="{{ URL::asset( 'dist/js/demo.js') }}"></script>
     <script src="{{ URL::asset( 'assets/js/select2.min.js') }}" type="text/javascript"></script>
-  
-<style>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
 
-#drop-area {
-    border-style: dotted;
-    min-height: 200px;
-    padding: 10px;
-    border-color: #999;
-    border-radius: 15px;
-    stroke-width: 1px;
-    margin-bottom: 15px;
-}
+    <script type="text/javascript">
+        Dropzone.options.imageUpload = {
+            maxFilesize         :       1,
+            acceptedFiles: ".jpeg,.jpg,.png,.gif"
+        };
+    </script>
 
-h3.drop-text {
-    color: #999;
-    text-align: center;
-    font-size: 2em;
-}
 
-#loader-icon {
-    display: none;
-}
-
-#success-message-info {
-    text-align: center;
-}
-</style>
-<script>
-$(document).ready(function() {
-    $("#drop-area").on('dragenter', function (e){
-    e.preventDefault();
-    });
-
-    $("#drop-area").on('dragover', function (e){
-    e.preventDefault();
-    });
-
-    $("#drop-area").on('drop', function (e){
-    e.preventDefault();
-    var image = e.originalEvent.dataTransfer.files;
-    createFormData(image);
-    });
-});
-
-function createFormData(image) {
-    var formImage = new FormData();
-    formImage.append('userImage', image[0]);
-    uploadFormData(formImage);
-}
-
-function uploadFormData(formData) {
-    $('#loader-icon').show();
-    $.ajax({
-        url: "upload-ajax.php",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(data) {
-            $('#drop-area').append(data);
-            $('#loader-icon').hide()
-            $('#success-message-info').html("Added Successfully");
-            $('#success-message-info').css("display", "inline-block");
-        }
-    });
-}
-</script>      
     <script type="text/javascript">
         const myModal = new bootstrap.Modal(document.getElementById('confirmModal'));
         function onCancel() { 
@@ -217,10 +162,10 @@ function uploadFormData(formData) {
           $('#smartwizard').smartWizard("reset");
 
           // Reset form
-          // document.getElementById("form-1").reset();
-          // document.getElementById("form-2").reset();
-          // document.getElementById("form-3").reset();
-          // document.getElementById("form-4").reset();
+          document.getElementById("form-1").reset();
+          document.getElementById("form-2").reset();
+          document.getElementById("form-3").reset();
+          document.getElementById("form-4").reset();
         }
 
         function onConfirm() {

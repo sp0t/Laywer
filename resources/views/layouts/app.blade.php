@@ -14,6 +14,11 @@
 	<link href="{{URL::asset('assets/css/all.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{URL::asset('assets/css/ajax-working.css')}}" rel="stylesheet" type="text/css">
 
+	<link href="{{ URL::asset( 'dist/css/demo.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ URL::asset( 'dist/css/smart_wizard_all.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+   
 	@yield('styles')
 	<!-- /global stylesheets -->
 	<style type="text/css">
@@ -212,13 +217,10 @@
 
 	<!-- Page content -->
 	<div class="page-content">
-
 		<!-- Main sidebar -->
 		<div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg">
-
 			<!-- Sidebar content -->
 			<div class="sidebar-content">
-
 				<!-- User menu -->
 				<div class="sidebar-section sidebar-user my-1">
 					<div class="sidebar-section-body">

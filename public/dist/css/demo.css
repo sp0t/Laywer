@@ -13,3 +13,24 @@
     color:#fff;
     font-size: 1.5em;
 }
+.drag-and-drop-division {
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+i.fa.fa-upload {
+    font-size: 37px;
+}
+
+.dropzone .dz-default.dz-message:before {
+    content: "";
+    font-family: icomoon;
+    font-size: 4rem;
+    display: none;
+    margin-bottom: 1.25rem;
+    line-height: 1;
+    color: #ccc;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

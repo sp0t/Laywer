@@ -97,6 +97,9 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/banners/{id}/edit', 'BannerController@edit')->name('mpl.admin.banners.edit')->where('id', '[0-9]+');
     Route::patch('/banners/{id}/edit', 'BannerController@update')->name('mpl.admin.banners.update')->where('id', '[0-9]+');    
     Route::get('/banners/{id}/view', 'BannerController@view')->name('mpl.admin.banners.view')->where('id', '[0-9]+');
+
+    Route::get('dropzone', 'DropzoneController@dropzone');
+    Route::post('dropzone/store', 'DropzoneController@dropzoneStore')->name('dropzone.store');
 });
 
 Route::get('/homedd',function(){
