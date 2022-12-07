@@ -93,15 +93,11 @@ class CaseController extends Controller
             'active_page'       => 'cases'
         ];
         
-        $pendingPayment   = CasePayment::leftjoin('cases','case_payments.case_id','cases.id')
-            ->where('case_payments.status', 0)
-            ->select('case_payments.*','cases.title')
-            ->get();
-
-        $completedPayment = CasePayment::where('status', 1)->get();
+        
+       
 
         $types         = CaseType::get();
-        $caseMilestone = CaseMilestone::where('status', 0)->get();
+        $caseMilestone = [];
 
         $caseInfo      = Cases::where('status', 0)
             ->where('created_by', Auth::user()->id)
@@ -115,9 +111,21 @@ class CaseController extends Controller
 
             $cleintInfo     = CaseClient::where('case_id', $caseInfo->id)->get();
             $CaseLawyerInfo = CaseLawyer::where('case_id', $caseInfo->id)->get();
+
             $caseMilestone  = CaseMilestone::where('status', 0)
                 ->where('mpl_id', $caseInfo->id)
                 ->get();
+
+             $completedPayment = CasePayment::where('status', 1)
+                 ->where('case_id', $caseInfo->id)
+                ->get();
+
+            $pendingPayment   = CasePayment::leftjoin('cases','case_payments.case_id','cases.id')
+                ->where('case_payments.status', 0)
+                ->select('case_payments.*','cases.title')
+                 ->where('case_payments.case_id', $caseInfo->id)
+                ->get();
+
 
             $documentList = CaseDocuments::where('case_id', $caseInfo->id)
                         ->leftjoin('users','case_documents.created_by','=','users.id')

@@ -165,7 +165,7 @@
                                                         <td>{{ $paymentInfo->amount }}</td>
                                                         <td>{{ $paymentInfo->amount }}</td>
                                                         <td>{{ $paymentInfo->amount }}</td>
-                                                        <td><a href="#">{{ $paymentInfo->payment_by }}</a></td>
+                                                        <td><a href="#">{{ $paymentInfo->date }}</a></td>
                                                         <td><a href="#">{{ $paymentInfo->date }}</a></td>
                                                         <td><a href="#">{{ $paymentInfo->date }}</a></td>
                                                         <td>
