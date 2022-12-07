@@ -199,10 +199,12 @@
                                                     <th class="sorting sorting_asc">
                                                         Payment ID
                                                     </th>
-                                                    <th class="sorting">Invoive number</th>
-                                                    <th class="sorting">Full Amount</th>
+                                                    <th class="sorting">Payment ID</th>
+                                                    <th class="sorting">Remarks</th>
+                                                    <th class="sorting"> Amount</th>
                                                     <th class="sorting">Paid By</th>
                                                     <th class="sorting">Paid Date</th>
+                                                    <th class="sorting">Payment type</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
