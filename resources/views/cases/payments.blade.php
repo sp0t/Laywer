@@ -114,6 +114,7 @@
             </div>
             <br />
         </div>
+        <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="saveFinalSubmit">    Save </button>
         <div class="success"></div>
         <div id="active_tab_data">
             <div class="card-body">
@@ -255,7 +256,7 @@
             </div>
             
         </div>
-        <button type="submit" class="btn btn-primary sw-btn-next sw-btn" id="saveFinalSubmit">    Save </button>
+        
     </form>
 </div>
 <script type="text/javascript">
