@@ -3,10 +3,10 @@
         <div class="row">
             <div class="col-md-12">
                 {!! Form::open([ 'route' => [ 'dropzone.store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'image-upload' ]) !!}
-                <div class="drag-and-drop-division">
-                    <h3 class="drag-and-drop">Drag and drop</h3>
-                    <i class="fa fa-upload" aria-hidden="true"></i>
-                </div>
+                        <div class="drag-and-drop-division">
+                            <h3 class="drag-and-drop">Drag and drop</h3>
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                        </div>
 
                     <input type="hidden" id="case_id_dcoument" @if(!empty($caseInfo->id)) value="{{ $caseInfo->id }}" @endif name="case_id_dcoument">
                 {!! Form::close() !!}

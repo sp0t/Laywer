@@ -38,7 +38,7 @@
     </tbody>
 </table>
 <script type="text/javascript">
-       function deleteMilestone(id) {
+    function deleteMilestone(id) {
         $.ajax({
             data: {
                 id : id,

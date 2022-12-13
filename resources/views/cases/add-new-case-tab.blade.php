@@ -137,13 +137,27 @@
     <script src="{{ URL::asset( 'assets/js/select2.min.js') }}" type="text/javascript"></script>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
+    <script src="{{ URL::asset( 'image_upload.js') }}"></script>
 
     <script type="text/javascript">
-        Dropzone.options.imageUpload = {
-            maxFilesize         :       1,
-            acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf"
-        };
+        //    Dropzone.options.dropzone =
+        // {
+        //     maxFilesize: 10,
+        //     renameFile: function (file) {
+        //         var dt = new Date();
+        //         var time = dt.getTime();
+        //         return time + file.name;
+        //     },
+        //     acceptedFiles: ".jpeg,.jpg,.png,.gif",
+        //     addRemoveLinks: true,
+        //     timeout: 60000,
+        //     success: function (file, response) {
+        //         console.log(response);
+        //     },
+        //     error: function (file, response) {
+        //         return false;
+        //     }
+        // };
     </script>
 
 

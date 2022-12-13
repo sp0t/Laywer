@@ -35,7 +35,7 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td style="width: 20%;">
+                         <td style="width: 20%;">
                             <div class="d-flex justify-content-end align-items-center">
                                 <button type="button" class="btn btn-primary" id="addMewMileStone">Add New Milestone <i class="icon-play3 ml-2"></i></button>
                             </div>
@@ -43,8 +43,19 @@
                     </tr>
                 </tbody>
             </table>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td style="width: 20%;">
+                            <div class="d-flex justify-content-end align-items-center">
+                                <button type="submit" class="btn btn-primary ml-3 sw-btn-next sw-btn">Save</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    
+       
         <div id="modalMileStone" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -179,9 +190,7 @@
             </div>
         </div>
         <br />
-        <div class="d-flex justify-content-end align-items-center">
-            <button type="submit" class="btn btn-primary ml-3 sw-btn-next sw-btn">Save</button>
-        </div>
+      
     </form>
 
 </div>

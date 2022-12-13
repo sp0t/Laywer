@@ -41,7 +41,17 @@ class DropzoneController extends Controller
         $caseDocuments->is_all_view   = 0;
         $caseDocuments->save();
 
+        
+
         return response()->json(['success'=>$imageName]);
+    }
+
+    public function caseDocumentView(Request $request) {
+
+        $documentList = CaseDocuments::where('case_id', $request->get('case_id'))
+            ->get();
+       
+        return view('cases.document_view', compact(  'documentList'));
     }
 
     public function caseDocumentDelete(Request $request) {
