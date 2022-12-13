@@ -101,7 +101,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($pendingPayment as $paymentInfo)
+                                        @foreach($completedPayment as $paymentInfo)
                                             <tr class="odd">
                                                 <td>{{ $paymentInfo->invoice_number }}</td>
                                                 <td>{{ $paymentInfo->amount }}</td>
