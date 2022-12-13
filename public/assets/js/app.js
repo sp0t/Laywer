@@ -253,11 +253,11 @@ const App = function () {
     // -------------------------
 
     // Tooltip
-    const componentTooltip = function() {
-        $('[data-popup="tooltip"]').tooltip({
-            boundary: '.page-content'
-        });
-    };
+    // const componentTooltip = function() {
+    //     $('[data-popup="tooltip"]').tooltip({
+    //         boundary: '.page-content'
+    //     });
+    // };
 
     // Popover
     const componentPopover = function() {

@@ -133,32 +133,42 @@ class MilestoneController extends Controller
 
     public function update(Request $request, $id){
         
+        
         $validator = Validator::make($request->all(), [
-            'name'         => 'required|string|min:5',
+            'milestone_title'         => 'required|string|min:4',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => FALSE, 'msg' => implode('<br>', $validator->errors()->all())]);
         } else {
             
-                $input = $request->input();
-                $case = CaseType::findOrFail($id);
-                $case->name         = $input['name'];
+            $input = $request->input();
+         
+            $case =  CaseMilestone::findOrFail($id);
+            $case->title           = $input['milestone_title'];
+            $case->description     = $input['milestone_descraption'];
+            $case->target_date     = $input['date'];
+            $case->status          = 0;
+            $case->created_by      = Auth::user()->id;
+ 
+            try {
+                DB::beginTransaction();
+                $case->save();
 
-                try {
-                    DB::beginTransaction();
-                    $case->save();
+                DB::commit();
+                \Session::flash('success', 'Case details added successfully.');
 
-                    DB::commit();
-                    \Session::flash('success', 'Case details added successfully.');
 
-                    return Redirect::to('cases/type');
+                $caseMilestone = CaseMilestone::where('status', 0)
+                    ->where('mpl_id', $input['case_id'])
+                    ->get();
+               
+                return view('cases.milestone_view', compact(  'caseMilestone'));
 
-                } catch (\Exception $e) {
-                    DB::rollback();
-                     return Redirect::to('cases/type');
-                }
-           
+            } catch (\Exception $e) {
+                DB::rollback();
+                 return Redirect::to('cases/type');
+            }
         }
     }
 

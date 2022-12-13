@@ -93,9 +93,6 @@ class CaseController extends Controller
             'active_page'       => 'cases'
         ];
         
-        
-       
-
         $types         = CaseType::get();
         $caseMilestone = [];
 
@@ -106,7 +103,10 @@ class CaseController extends Controller
 
         $cleintInfo        = [];
         $CaseLawyerInfo    = [];
-        $documentList    = [];
+        $documentList      = [];
+        $pendingPayment    = [];
+        $completedPayment  = [];
+        
         if(!empty($caseInfo )) {
 
             $cleintInfo     = CaseClient::where('case_id', $caseInfo->id)->get();
@@ -116,7 +116,7 @@ class CaseController extends Controller
                 ->where('mpl_id', $caseInfo->id)
                 ->get();
 
-             $completedPayment = CasePayment::where('status', 1)
+            $completedPayment = CasePayment::where('status', 1)
                  ->where('case_id', $caseInfo->id)
                 ->get();
 
@@ -126,11 +126,10 @@ class CaseController extends Controller
                  ->where('case_payments.case_id', $caseInfo->id)
                 ->get();
 
-
             $documentList = CaseDocuments::where('case_id', $caseInfo->id)
-                        ->leftjoin('users','case_documents.created_by','=','users.id')
-                        ->select('users.name as userName','case_documents.*')
-                        ->get();
+                ->leftjoin('users','case_documents.created_by','=','users.id')
+                ->select('users.name as userName','case_documents.*')
+                ->get();
         }
  
         $lawyers       = User::where(['status'=> 1, 'user_type' => 1])->get();
@@ -200,7 +199,7 @@ class CaseController extends Controller
         }
     }
 
-     public function payment(Request $request){
+    public function payment(Request $request){
       
         $validator = Validator::make($request->all(), [
             'payment_by'    => 'required',
@@ -217,18 +216,29 @@ class CaseController extends Controller
             $case->payment_by      = $input['payment_by'];
             $case->amount          = $input['amount'];
             $case->date            = $input['date'];
-            $case->status          = $input['payment_type'];
-            $case->case_id          = $input['case_id'];
+            $case->status          = $input['payment_status'];
+            $case->case_id         = $input['case_id'];
             $case->invoice_number  = date('Ymdhim');
             $case->created_by      = Auth::user()->id;
 
             try {
+
                 DB::beginTransaction();
+
                 $case->save();
 
                 DB::commit();
-                
-                return 200;
+                $pendingPayment   = CasePayment::leftjoin('cases','case_payments.case_id','cases.id')
+                    ->where('case_payments.status', 0)
+                    ->select('case_payments.*','cases.title')
+                     ->where('case_payments.case_id', $input['case_id'])
+                    ->get();
+
+                $completedPayment = CasePayment::where('status', 1)
+                     ->where('case_id', $input['case_id'])
+                    ->get();
+               
+                return view('cases.payment_ajax', compact('pendingPayment','completedPayment'));
 
             } catch (\Exception $e) {
                 DB::rollback();
@@ -237,7 +247,8 @@ class CaseController extends Controller
         }
     }
 
-    public function edit(Request $request, $id){
+    public function edit(Request $request, $id) {
+
         $case = Cases::with(['case_lawyers', 'case_clients'])->findOrFail($id);
 
         $page_meta = [
@@ -354,6 +365,7 @@ class CaseController extends Controller
     // ->-->--->---->-----> milestone <-----<----<---<--<-
 
     public function load_ajax_milestone(Request $request) {
+
         $input = $request->input();        
         $milestones = CaseMilestone::select(['case_milestones.id', 'case_milestones.title', 'case_milestones.description', 'case_milestones.target_date', 'case_milestones.status', 'users.name as created_by', 'case_milestones.created_at', 'case_milestones.mpl_id'])
             ->join('users', 'users.id', 'case_milestones.created_by');

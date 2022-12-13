@@ -87,6 +87,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/milestones/load_ajax', 'MilestoneController@load_ajax')->name('milestone.load_ajax'); 
     Route::get('/milestones/add', 'MilestoneController@create')->name('milestone.create');
     Route::post('/milestone', 'MilestoneController@store')->name('milestone.store');
+    Route::post('/milestone/update/{id}', 'MilestoneController@update')->name('milestone.update');
 
 
     //Banners - 2022/10/25
